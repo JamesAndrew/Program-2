@@ -52,7 +52,7 @@ class Server:
 
     def sendRequestVote(self, term, candidateId, lastLogIndex, lastLogTerm):
         print("send request vote message")
-        queue = sqs.get_queue_by_name(QueueName='node0')
+        queue = sqs.get_queue_by_name(QueueName='node1')
         queue.send_message(MessageBody= str(term) + "," + str(candidateId))
 
     def processMessages(self):
@@ -61,7 +61,7 @@ class Server:
         for message in messages:
             print("msg= " + message.body)
             m_list = message.body.split(",")
-            #if int(m_list[0]) < self.curTerm:
+            if int(m_list[0]) < self.curTerm:
             sqs.get_queue_by_name(QueueName='node0').send_message(MessageBody="notvoting")
             message.delete()        
 
