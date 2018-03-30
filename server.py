@@ -1,3 +1,4 @@
+# server code for Raft
 from threading import Timer
 import random
 import boto3
