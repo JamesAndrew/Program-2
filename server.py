@@ -63,6 +63,8 @@ class Server:
             m_list = message.body.split(",")
             if int(m_list[0]) < self.curTerm:
                 sqs.get_queue_by_name(QueueName='node0').send_message(MessageBody="notvoting")
+            else:
+                sqs.get_queue_by_name(QueueName='node0').send_message(MessageBody="voting")
             message.delete()        
 
     def receiveRequestVote(self):
@@ -84,7 +86,7 @@ sqs = boto3.resource('sqs')
 
 # main loop of Server
 loop = True
-turn = 5
+turn = 10
 while loop:
     if turn == 0:
         loop = False
