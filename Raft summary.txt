@@ -1,0 +1,80 @@
+Server State will just be an integer
+	0 - follower (initialized), 1 = candidate, 2 = leader, or otherwise error
+
+election timeout (randomly between 150 and 300ms at beginning of each election)
+
+State
+	Persitent state on all servers
+		currentTerm
+		votedFor
+		log[]
+	
+	volatile state on all servers
+		commitIndex
+		lastApplied
+
+	volatile state on leaders (reinitialized after election)
+		nextIndex[]
+		matchIndex[]
+
+AppendEntries msg (invoked by leader to replicate logs and heartbeat)
+	Arguments 
+		term
+		leaderId
+		prevLogIndex
+		prevLogTerm
+		entries[]
+		leaderCommit
+
+	Results 
+		term
+		success 
+
+	Receiver Implementation 
+		1. false if term < curTerm
+		2. false if log contain an entry at prevLogIndex whose term matches prevLogTerm
+		3. if an existing entry conflicts with a new one (same index, diff terms), delete existing entry and all that follow it
+		4. append any new entries not already in the log
+		5. if leaderCommit > commitIndex, set commitIndex = min(leaderCommit, index of last new entry)
+
+RequestVote msg (invoked by candidates to gather votes)
+	Arguments 
+		term
+		candidateId
+		lastLogIndex
+		lastLogTerm
+
+	Results 
+		term
+		voteGranted
+
+	Receiver Implementation 
+		1. reply false if term < curTerm
+		2. if votedFor is null or candidateId, and candidate's log is at least as up-to-date as receiver's log, grant vote
+
+Rules for Servers
+	All Servers 
+		if commitIndex > lastApplied; increment lastApplied, apply log[lastApplied] to state machine 
+		if RPC request or response contains term T > curTerm; set curTerm = T, convert to follower
+
+	Followers 
+		respond to msgs from candidates and leaders 
+		if election timeout elapses without receiving AppendEntries msg from current leader or granting vote to candidate; convert to candidate 
+
+	Candidates 
+		Upon conversion to candidate, start election 
+			increment curTerm
+			vote for self
+			reset election timer
+			send RequestVote msgs to all other servers
+		if votes received from majority of servers; become leader
+		if AppendEntries msgs received from new leader; convert to follower
+		if election timeout elapses; start new election 
+
+	Leaders 
+		upon election, send initial empty AppendEntries msgs (heartbeat) to each server; repeat during idle periods to prevent election timeouts
+		if command received from client; append entry to local log, respond after entry applied to state machine 
+		if last log index >= nextIndex for a follower; send AppendEntries msg with log entries starting at nextIndex
+			if successful; update nextIndex and matchIndex for follower
+			if AppendEntries fails because of log inconsistency; decrement nextIndex and retry
+		if there exists an N s.t. N > commitIndex, a majority of matchIndex[i] >= N, and log[N].term == curTerm; set commitIndex = N
