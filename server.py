@@ -62,7 +62,7 @@ class Server:
             print("msg= " + message.body)
             m_list = message.body.split(",")
             if int(m_list[0]) < self.curTerm:
-            sqs.get_queue_by_name(QueueName='node0').send_message(MessageBody="notvoting")
+                sqs.get_queue_by_name(QueueName='node0').send_message(MessageBody="notvoting")
             message.delete()        
 
     def receiveRequestVote(self):
