@@ -109,7 +109,7 @@ while loop:
         s.votedFor = s.name
         s.start_timer()
         s.sendRequestVote(s.curTerm,s.getName(),1,1)
-        queue = sqs.get_queue_by_name(QueueName='node0')
+        queue = sqs.get_queue_by_name(QueueName='node' + s.getName())
         messages = queue.receive_messages()
         for message in messages:
             print("msg= " + message.body)
