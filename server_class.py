@@ -6,6 +6,7 @@ import boto3
 sqs = boto3.resource('sqs')
 
 class Server:
+    running = False
     name = 0
 
     timer = False
@@ -30,6 +31,7 @@ class Server:
     def __init__(self):
         self.name = input("server name: ")
         print("new server " + str(self.name) + " added")
+        self.running = True 
 
     def getName(self):
         return self.name
@@ -90,8 +92,10 @@ class Server:
             m_list = message.body.split(",")
             if m_list[0] == "voteR":
                 receiveRequestVote(message.body)
-            if m_list[0] == "append":
+            elif m_list[0] == "append":
                 receiveAppendEntries(message.body)
+            elif m_list[0] == "end":
+                running = False
 
     def fail(self):
         print("node " + str(self.name) + " failed")

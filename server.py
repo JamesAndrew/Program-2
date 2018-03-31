@@ -16,7 +16,6 @@ sqs = boto3.resource('sqs')
 # main loop of Server
 loop = True
 while loop:
-        
     # code for all servers
     if s.commitIndex > s.lastApplied:
             s.lastApplied = s.lastApplied + 1
@@ -46,7 +45,11 @@ while loop:
         print("I am a leader");
         s.sendAppendEntries(s.curTerm, s.getName(),1,1,1,1)
         loop = False
+        sqs.get_queue_by_name(QueueName='node1').send_message(MessageBody="end")
 
     # error
     else:
         print("role " + str(s.role) + " does not exist");
+
+    if s.running == 0
+        loop = False
