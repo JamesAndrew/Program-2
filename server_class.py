@@ -3,6 +3,8 @@ from threading import Timer
 import random
 import boto3
 
+sqs = boto3.resource('sqs')
+
 class Server:
     name = 0
 
@@ -58,25 +60,38 @@ class Server:
         print("send request vote message")
         for i in range(0, 5):
             if i != self.name:
-                sqs.get_queue_by_name(QueueName='node' + i).send_message(MessageBody="vote," + str(term) + "," + str(candidateId))
+                sqs.get_queue_by_name(QueueName='node' + str(i)).send_message(MessageBody="voteR," + str(term) + "," + str(candidateId))
+
+    def receiveRequestVote(self, v):
+        print("receive request vote message")
+        msg = v.split(",")
+        if self.votedFor == "5" or self.votedFor == msg[2]:
+            sqs.get_queue_by_name(QueueName='node' + str(self.name).send_message(MessageBody="vote," + msg[1] + "," + msg[2]))
 
     def processVotes(self):
         votes = 0
         queue = sqs.get_queue_by_name(QueueName='node' + str(self.name))
         messages = queue.receive_messages()
         for message in messages:
-            print("msg= " + message.body)
             m_list = message.body.split(",")
-            if int(m_list[1]) < self.curTerm:
-                pass
-            if self.votedFor == 5 or self.votedFor == m_list[2]:
+            if m_list[0] == "vote" and m_list[1] == s.curTerm and m_list[2] == self.name:
                 votes = votes + 1
-            message.delete()
+                message.delete()
 
-        return votes
+        if votes > 1:
+            return True
+        else:
+            return False
 
-    def receiveRequestVote(self):
-        print("receive request vote message")
+    def processMessages(self):
+        queue = sqs.get_queue_by_name(QueueName='node' + str(self.name))
+        messages = queue.receive_messages()
+        for message in messages:
+            m_list = message.body.split(",")
+            if m_list[0] == "voteR":
+                receiveRequestVote(message.body)
+            if m_list[0] == "append":
+                receiveAppendEntries(message.body)
 
     def fail(self):
         print("node " + str(self.name) + " failed")

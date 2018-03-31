@@ -15,10 +15,7 @@ sqs = boto3.resource('sqs')
 
 # main loop of Server
 loop = True
-turn = 10
 while loop:
-    if turn == 0:
-        loop = False
         
     # code for all servers
     if s.commitIndex > s.lastApplied:
@@ -27,7 +24,7 @@ while loop:
             
     # code for followers
     if s.role == 0:
-        #s.processMessages()
+        s.processMessages()
         if s.getTimer() == False:
             s.role = 1
         
@@ -40,15 +37,16 @@ while loop:
         s.votedFor = s.name
         s.start_timer()
         s.sendRequestVote(s.curTerm,s.getName(),1,1)
-        
+        if s.processVotes():
+            s.role = 2
+            
 
     # code for leaders
     elif s.role == 2:
         print("I am a leader");
         s.sendAppendEntries(s.curTerm, s.getName(),1,1,1,1)
+        loop = False
 
     # error
     else:
         print("role " + str(s.role) + " does not exist");
-
-    turn = turn - 1
