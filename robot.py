@@ -2,6 +2,7 @@ class Robot:
     name = 0
     blocking_with_left = False
     blocking_with_right = False
+    head_knocked_off = False
 
     def __init__(self):
         print("new robot")
