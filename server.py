@@ -51,5 +51,5 @@ while loop:
     else:
         print("role " + str(s.role) + " does not exist");
 
-    if s.running == 0
+    if s.running == 0:
         loop = False

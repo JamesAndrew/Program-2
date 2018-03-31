@@ -91,11 +91,11 @@ class Server:
         for message in messages:
             m_list = message.body.split(",")
             if m_list[0] == "voteR":
-                receiveRequestVote(message.body)
+                self.receiveRequestVote(message.body)
             elif m_list[0] == "append":
-                receiveAppendEntries(message.body)
+                self.receiveAppendEntries(message.body)
             elif m_list[0] == "end":
-                running = False
+                self.running = False
 
     def fail(self):
         print("node " + str(self.name) + " failed")
