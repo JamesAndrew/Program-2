@@ -78,7 +78,6 @@ class Server:
             m_list = message.body.split(",")
             if m_list[0] == "vote" and m_list[1] == s.curTerm and m_list[2] == self.name:
                 votes = votes + 1
-                message.delete()
 
         if votes > 1:
             return True
