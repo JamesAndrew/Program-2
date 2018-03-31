@@ -44,7 +44,7 @@ while loop:
     elif s.role == 2:
         print("I am a leader");
         s.sendAppendEntries(s.curTerm, s.getName(),1,1,1,1)
-        loop = False
+        s.running = False
         sqs.get_queue_by_name(QueueName='node1').send_message(MessageBody="end")
 
     # error
@@ -53,3 +53,5 @@ while loop:
 
     if s.running == 0:
         loop = False
+        sqs.get_queue_by_name(QueueName='node' + str(self.name)).purge_queue()
+        
