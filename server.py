@@ -23,6 +23,7 @@ while loop:
     # code for all servers
     if s.commitIndex > s.lastApplied:
             s.lastApplied = s.lastApplied + 1
+            s.state = s.log[lastApplied]
             
     # code for followers
     if s.role == 0:

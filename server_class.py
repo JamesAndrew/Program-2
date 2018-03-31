@@ -15,6 +15,7 @@ class Server:
     curTerm = 0
     votedFor = 5 # 5 indicates a null value
     log = []
+    state = ""
 
     # volatile state
     commitIndex = 0
