@@ -29,7 +29,7 @@ while loop:
             print("I am becoming a candidate")
             s.curTerm = s.curTerm + 1
             s.votedFor = s.name
-            #s.start_timer()
+            s.start_timer()
             s.sendRequestVote(s.curTerm,s.getName(),1,1)
         
     # code for candidates
