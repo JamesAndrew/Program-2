@@ -66,8 +66,9 @@ class Server:
             if i != self.name:
                 sqs.get_queue_by_name(QueueName='node' + str(i)).send_message(MessageBody="append," + str(term) + "," + str(leaderId))
 
-    def receiveAppendEntries(self):
-        #self.checkTerm(term)
+    def receiveAppendEntries(self, a):
+        msg = a.split(",")
+        self.checkTerm(int(a[1]))
         print("receive append entry message")
         self.role = 0
         self.start_timer()
@@ -85,6 +86,7 @@ class Server:
             sqs.get_queue_by_name(QueueName='node' + str(self.name)).send_message(MessageBody="vote," + str(msg[1]) + "," + str(msg[2]))
             self.votedFor = int(msg[2]);
             if self.name != msg[2]:
+                self.role = 0
                 self.start_timer()
         self.checkTerm(int(msg[1]))
 
