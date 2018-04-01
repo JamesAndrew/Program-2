@@ -42,6 +42,7 @@ while loop:
         print("I am a candidate")
         if s.processVotes():
             s.role = 2
+            s.cancel_timer()
             print("I am becoming a leader")
             s.sendAppendEntries(s.curTerm, s.getName(),1,1,1,1)
         elif s.getTimer() == False:

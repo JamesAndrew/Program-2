@@ -6,6 +6,7 @@ import boto3
 sqs = boto3.resource('sqs')
 
 class Server:
+    t = 0
     running = False
     name = 0
 
@@ -42,12 +43,15 @@ class Server:
     def start_timer(self):
         print("node " + str(self.name) + " timer started")
         self.timer = True
-        t = Timer(random.uniform(0.15, 0.8), self.out_of_time)
-        t.start()
+        self.t = Timer(random.uniform(0.15, 0.8), self.out_of_time)
+        self.t.start()
 
     def out_of_time(self):
         print("node " + str(self.name) + " timer ended")
         self.timer = False
+
+    def cancel_timer(self):
+        self.t.cancel()
 
     def checkTerm(self, T):
         print("term check")
@@ -80,7 +84,8 @@ class Server:
         if self.votedFor == "5" or self.votedFor == msg[2]:
             sqs.get_queue_by_name(QueueName='node' + str(self.name)).send_message(MessageBody="vote," + str(msg[1]) + "," + str(msg[2]))
             self.votedFor = int(msg[2]);
-            self.start_timer()
+            if self.name != msg[2]:
+                self.start_timer()
         self.checkTerm(int(msg[1]))
 
     def processVotes(self):
