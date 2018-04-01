@@ -42,7 +42,7 @@ class Server:
     def start_timer(self):
         print("node " + str(self.name) + " timer started")
         self.timer = True
-        t = Timer(random.uniform(0.5, 5.0), self.out_of_time)
+        t = Timer(random.uniform(0.15, 0.3), self.out_of_time)
         t.start()
 
     def out_of_time(self):
@@ -79,6 +79,7 @@ class Server:
         msg = v.split(",")
         if self.votedFor == "5" or self.votedFor == msg[2]:
             sqs.get_queue_by_name(QueueName='node' + str(self.name)).send_message(MessageBody="vote," + str(msg[1]) + "," + str(msg[2]))
+            self.votedFor = int(msg[2]);
             self.start_timer()
         self.checkTerm(int(msg[1]))
 
