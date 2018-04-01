@@ -25,6 +25,7 @@ loop = True
 while loop:
     print("term " + str(s.curTerm))
     # code for all servers
+    s.checkMessages()
     if s.commitIndex > s.lastApplied:
             s.lastApplied = s.lastApplied + 1
             s.state = s.log[lastApplied]

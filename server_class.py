@@ -60,7 +60,6 @@ class Server:
             self.role = 0
 
     def sendAppendEntries(self, term, leaderId, prevLogIndex, prevLogTerm, entries, leaderCommit):
-        self.checkTerm(term)
         print("send append entry message")
         for i in range(0, 5):
             if i != self.name:
@@ -75,7 +74,6 @@ class Server:
         self.start_timer()
 
     def sendRequestVote(self, term, candidateId, lastLogIndex, lastLogTerm):
-        self.checkTerm(term)
         print("send request vote message")
         for i in range(0, 5):
             sqs.get_queue_by_name(QueueName='node' + str(i)).send_message(MessageBody="voteR," + str(term) + "," + str(candidateId))
@@ -84,7 +82,6 @@ class Server:
         print("receive request vote message")
         print(v)
         msg = v.split(",")
-        self.checkTerm(int(msg[1]))
         if int(msg[1]) < self.curTerm:
             pass
         elif self.votedFor == "5" or self.votedFor == msg[2]:
@@ -93,7 +90,6 @@ class Server:
             if self.name != msg[2]:
                 self.role = 0
                 self.start_timer()
-        
 
     def processVotes(self):
         print("processing votes")
@@ -123,6 +119,15 @@ class Server:
             elif m_list[0] == "end":
                 self.running = False
 
+    def checkMessages(self):
+        queue = sqs.get_queue_by_name(QueueName='node' + str(self.name))
+        messages = queue.receive_messages()
+        for message in messages:
+            m_list = message.body.split(",")
+            if int(m_list[1]) > self.curTerm:
+                self.curTerm = m_list[1]
+                self.role = 0
+    
     def fail(self):
         print("node " + str(self.name) + " failed")
 
