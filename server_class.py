@@ -16,7 +16,6 @@ class Server:
     role = 0
     
     # persitent state
-    curTerm: int
     curTerm = 0
     votedFor = 5 # 5 indicates a null value
     log = []
