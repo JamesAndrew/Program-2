@@ -81,10 +81,10 @@ class Server:
             sqs.get_queue_by_name(QueueName='node' + str(i)).send_message(MessageBody="voteR," + str(term) + "," + str(candidateId))
 
     def receiveRequestVote(self, v):
-        self.checkTerm(int(msg[1]))
         print("receive request vote message")
         print(v)
         msg = v.split(",")
+        self.checkTerm(int(msg[1]))
         if v[1] < curTerm:
             pass
         elif self.votedFor == "5" or self.votedFor == msg[2]:
