@@ -23,6 +23,7 @@ sqs = boto3.resource('sqs')
 # main loop of Server
 loop = True
 while loop:
+    print("term " + s.curTerm)
     # code for all servers
     if s.commitIndex > s.lastApplied:
             s.lastApplied = s.lastApplied + 1
