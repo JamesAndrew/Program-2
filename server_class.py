@@ -124,7 +124,7 @@ class Server:
         messages = queue.receive_messages()
         for message in messages:
             m_list = message.body.split(",")
-            if int(m_list[1]) > self.curTerm:
+            if int(m_list[1]) > int(self.curTerm):
                 self.curTerm = m_list[1]
                 self.role = 0
     
