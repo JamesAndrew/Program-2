@@ -30,6 +30,7 @@ while loop:
             s.state = s.log[lastApplied]
             
     # code for followers
+    print("I am a follower")
     if s.role == 0:
         s.processMessages()
         if s.getTimer() == False:
