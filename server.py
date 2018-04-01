@@ -62,4 +62,6 @@ while loop:
 
     if s.running == False:
         loop = False
+
+    
         
