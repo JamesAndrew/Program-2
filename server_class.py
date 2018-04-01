@@ -85,7 +85,7 @@ class Server:
         print(v)
         msg = v.split(",")
         self.checkTerm(int(msg[1]))
-        if v[1] < curTerm:
+        if v[1] < self.curTerm:
             pass
         elif self.votedFor == "5" or self.votedFor == msg[2]:
             sqs.get_queue_by_name(QueueName='node' + str(self.name)).send_message(MessageBody="vote," + str(msg[1]) + "," + str(msg[2]))
