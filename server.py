@@ -38,7 +38,6 @@ while loop:
         
     # code for candidates
     elif s.role == 1:
-        s.processMessages()
         print("I am a candidate")
         if s.processVotes():
             s.role = 2
