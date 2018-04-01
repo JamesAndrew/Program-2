@@ -44,7 +44,7 @@ while loop:
             s.role = 2
             print("I am becoming a leader")
             s.sendAppendEntries(s.curTerm, s.getName(),1,1,1,1)
-        elif s.getTimer() == False
+        elif s.getTimer() == False:
             election()
 
     # code for leaders
