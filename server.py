@@ -8,6 +8,13 @@ import server_class
 def checkClientMessages():
     queue = sqs.get_queue_by_name(QueueName='p0')
 
+def election():
+    print("election started")
+    s.curTerm = s.curTerm + 1
+    s.votedFor = s.name
+    s.start_timer()
+    s.sendRequestVote(s.curTerm,s.getName(),1,1)
+
 # create server object
 s = server_class.Server()
 s.start_timer()
@@ -27,10 +34,7 @@ while loop:
         if s.getTimer() == False:
             s.role = 1
             print("I am becoming a candidate")
-            s.curTerm = s.curTerm + 1
-            s.votedFor = s.name
-            s.start_timer()
-            s.sendRequestVote(s.curTerm,s.getName(),1,1)
+            election()
         
     # code for candidates
     elif s.role == 1:
@@ -40,6 +44,8 @@ while loop:
             s.role = 2
             print("I am becoming a leader")
             s.sendAppendEntries(s.curTerm, s.getName(),1,1,1,1)
+        elif s.getTimer() == False
+            election()
 
     # code for leaders
     elif s.role == 2:
