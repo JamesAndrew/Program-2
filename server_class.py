@@ -53,10 +53,12 @@ class Server:
         print("send append entry message")
         for i in range(0, 5):
             if i != self.name:
-                sqs.get_queue_by_name(QueueName='node' + i).send_message(MessageBody="append," + str(term) + "," + str(leaderId))
+                sqs.get_queue_by_name(QueueName='node' + str(i)).send_message(MessageBody="append," + str(term) + "," + str(leaderId))
 
     def receiveAppendEntries(self):
         print("receive append entry message")
+        self.role = 0
+        self.start_timer()
 
     def sendRequestVote(self, term, candidateId, lastLogIndex, lastLogTerm):
         print("send request vote message")

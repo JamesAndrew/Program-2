@@ -39,12 +39,13 @@ while loop:
         print("I am a candidate")
         if s.processVotes():
             s.role = 2
-            
+            print("I am becoming a leader")
+            s.sendAppendEntries(s.curTerm, s.getName(),1,1,1,1)
 
     # code for leaders
     elif s.role == 2:
         print("I am a leader");
-        #s.sendAppendEntries(s.curTerm, s.getName(),1,1,1,1)
+        s.sendAppendEntries(s.curTerm, s.getName(),1,1,1,1)
         s.running = False
         sqs.get_queue_by_name(QueueName='node1').send_message(MessageBody="end")
 
