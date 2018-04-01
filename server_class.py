@@ -61,14 +61,13 @@ class Server:
     def sendRequestVote(self, term, candidateId, lastLogIndex, lastLogTerm):
         print("send request vote message")
         for i in range(0, 5):
-            if i != self.name:
-                sqs.get_queue_by_name(QueueName='node' + str(i)).send_message(MessageBody="voteR," + str(term) + "," + str(candidateId))
+            sqs.get_queue_by_name(QueueName='node' + str(i)).send_message(MessageBody="voteR," + str(term) + "," + str(candidateId))
 
     def receiveRequestVote(self, v):
         print("receive request vote message")
         msg = v.split(",")
         if self.votedFor == "5" or self.votedFor == msg[2]:
-            sqs.get_queue_by_name(QueueName='node' + str(self.name).send_message(MessageBody="vote," + msg[1] + "," + msg[2]))
+            sqs.get_queue_by_name(QueueName='node' + str(self.name)).send_message(MessageBody="vote," + str(msg[1]) + "," + str(msg[2]))
 
     def processVotes(self):
         votes = 0
@@ -76,10 +75,11 @@ class Server:
         messages = queue.receive_messages()
         for message in messages:
             m_list = message.body.split(",")
-            if m_list[0] == "vote" and m_list[1] == s.curTerm and m_list[2] == self.name:
+            print(m_list)
+            if m_list[0] == "vote" and m_list[2] == self.name:
                 votes = votes + 1
 
-        if votes > 1:
+        if votes > 0:
             return True
         else:
             return False

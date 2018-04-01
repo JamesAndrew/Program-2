@@ -26,16 +26,17 @@ while loop:
         s.processMessages()
         if s.getTimer() == False:
             s.role = 1
+            print("I am becoming a candidate")
+            s.curTerm = s.curTerm + 1
+            s.votedFor = s.name
+            #s.start_timer()
+            s.sendRequestVote(s.curTerm,s.getName(),1,1)
         
     # code for candidates
     
     elif s.role == 1:
-        
+        s.processMessages()
         print("I am a candidate")
-        s.curTerm = s.curTerm + 1
-        s.votedFor = s.name
-        s.start_timer()
-        s.sendRequestVote(s.curTerm,s.getName(),1,1)
         if s.processVotes():
             s.role = 2
             
@@ -43,7 +44,7 @@ while loop:
     # code for leaders
     elif s.role == 2:
         print("I am a leader");
-        s.sendAppendEntries(s.curTerm, s.getName(),1,1,1,1)
+        #s.sendAppendEntries(s.curTerm, s.getName(),1,1,1,1)
         s.running = False
         sqs.get_queue_by_name(QueueName='node1').send_message(MessageBody="end")
 
@@ -51,7 +52,6 @@ while loop:
     else:
         print("role " + str(s.role) + " does not exist");
 
-    if s.running == 0:
+    if s.running == False:
         loop = False
-        sqs.get_queue_by_name(QueueName='node' + str(self.name)).purge_queue()
         
