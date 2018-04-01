@@ -51,7 +51,7 @@ class Server:
 
     def checkTerm(self, T):
         print("term check")
-        if int(T) > self.curTerm:
+        if T > self.curTerm:
             self.curTerm = T
             self.role = 0
 
@@ -80,7 +80,7 @@ class Server:
         if self.votedFor == "5" or self.votedFor == msg[2]:
             sqs.get_queue_by_name(QueueName='node' + str(self.name)).send_message(MessageBody="vote," + str(msg[1]) + "," + str(msg[2]))
             self.start_timer()
-        self.checkTerm(msg[1])
+        self.checkTerm(int(msg[1]))
 
     def processVotes(self):
         print("processing votes")
