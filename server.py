@@ -22,6 +22,7 @@ sqs = boto3.resource('sqs')
 
 # main loop of Server
 loop = True
+count = 15
 while loop:
     print("term " + str(s.curTerm))
     # code for all servers
@@ -64,5 +65,8 @@ while loop:
     if s.running == False:
         loop = False
 
+    count = count - 1
+    if count == 0
+        loop = False
     
         
