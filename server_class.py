@@ -49,23 +49,34 @@ class Server:
         print("node " + str(self.name) + " timer ended")
         self.timer = False
 
+    def checkTerm(self, T):
+        print("term check")
+        if T > self.curTerm:
+            self.curTerm = T
+            self.role = 0
+
     def sendAppendEntries(self, term, leaderId, prevLogIndex, prevLogTerm, entries, leaderCommit):
+        self.checkTerm(term)
         print("send append entry message")
         for i in range(0, 5):
             if i != self.name:
                 sqs.get_queue_by_name(QueueName='node' + str(i)).send_message(MessageBody="append," + str(term) + "," + str(leaderId))
 
     def receiveAppendEntries(self):
+        self.checkTerm(term)
         print("receive append entry message")
         self.role = 0
         self.start_timer()
 
-    def sendRequestVote(self, term, candidateId, lastLogIndex, lastLogTerm):
+    def sendRequestVote(self, term, candidateId, lastLogIndex, lastLogTerm)
+        self.checkTerm(term)
+
         print("send request vote message")
         for i in range(0, 5):
             sqs.get_queue_by_name(QueueName='node' + str(i)).send_message(MessageBody="voteR," + str(term) + "," + str(candidateId))
 
     def receiveRequestVote(self, v):
+        self.checkTerm(term)
         print("receive request vote message")
         msg = v.split(",")
         if self.votedFor == "5" or self.votedFor == msg[2]:
