@@ -33,7 +33,6 @@ while loop:
             s.sendRequestVote(s.curTerm,s.getName(),1,1)
         
     # code for candidates
-    
     elif s.role == 1:
         s.processMessages()
         print("I am a candidate")

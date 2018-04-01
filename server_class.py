@@ -72,6 +72,7 @@ class Server:
             sqs.get_queue_by_name(QueueName='node' + str(self.name)).send_message(MessageBody="vote," + str(msg[1]) + "," + str(msg[2]))
 
     def processVotes(self):
+        print("processing votes")
         votes = 0
         queue = sqs.get_queue_by_name(QueueName='node' + str(self.name))
         messages = queue.receive_messages()
