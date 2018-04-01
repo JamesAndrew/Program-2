@@ -51,7 +51,7 @@ class Server:
 
     def checkTerm(self, T):
         print("term check")
-        if T > self.curTerm:
+        if int(T) > self.curTerm:
             self.curTerm = T
             self.role = 0
 
