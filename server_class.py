@@ -43,7 +43,7 @@ class Server:
     def start_timer(self):
         print("node " + str(self.name) + " timer started")
         self.timer = True
-        self.t = Timer(random.uniform(0.15, 0.3), self.out_of_time)
+        self.t = Timer(random.uniform(1.0, 5.0), self.out_of_time)
         self.t.start()
 
     def out_of_time(self):
