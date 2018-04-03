@@ -99,6 +99,8 @@ class Server:
             print(m_list)
             if m_list[0] == "vote" and m_list[2] == self.name:
                 votes = votes + 1
+            if self.votedFor == self.name
+                votes = votes + 1
 
         if votes > 1:
             return True
