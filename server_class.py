@@ -85,7 +85,7 @@ class Server:
         print("receive request vote message")
         print(v)
         msg = v.split(",")
-        self.checkTerm(msg[1])
+        self.checkTerm(int(msg[1]))
         if int(msg[1]) < int(self.curTerm):
             pass
         elif self.votedFor == 5 or self.votedFor == msg[2]:
