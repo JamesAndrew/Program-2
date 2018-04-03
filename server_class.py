@@ -61,6 +61,7 @@ class Server:
 
     def sendAppendEntries(self, term, leaderId, prevLogIndex, prevLogTerm, entries, leaderCommit):
         print("send append entry message")
+        self.checkTerm(term)
         for i in range(0, 5):
             if i != self.name:
                 sqs.get_queue_by_name(QueueName='node' + str(i)).send_message(MessageBody="append," + str(term) + "," + str(leaderId))
@@ -74,6 +75,7 @@ class Server:
         self.start_timer()
 
     def sendRequestVote(self, term, candidateId, lastLogIndex, lastLogTerm):
+        self.checkTerm(term)
         print("send request vote message")
         for i in range(0, 5):
             if i != self.name:
@@ -83,6 +85,7 @@ class Server:
         print("receive request vote message")
         print(v)
         msg = v.split(",")
+        self.checkTerm(msg[1])
         if int(msg[1]) < int(self.curTerm):
             pass
         elif self.votedFor == 5 or self.votedFor == msg[2]:
