@@ -76,7 +76,8 @@ class Server:
     def sendRequestVote(self, term, candidateId, lastLogIndex, lastLogTerm):
         print("send request vote message")
         for i in range(0, 5):
-            sqs.get_queue_by_name(QueueName='node' + str(i)).send_message(MessageBody="voteR," + str(term) + "," + str(candidateId))
+            if i != self.name:
+                sqs.get_queue_by_name(QueueName='node' + str(i)).send_message(MessageBody="voteR," + str(term) + "," + str(candidateId))
 
     def receiveRequestVote(self, v):
         print("receive request vote message")
