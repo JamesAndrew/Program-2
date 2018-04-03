@@ -22,7 +22,7 @@ sqs = boto3.resource('sqs')
 
 # main loop of Server
 loop = True
-count = 30
+count = 10
 while loop:
     print("term " + str(s.curTerm))
     # code for all servers
