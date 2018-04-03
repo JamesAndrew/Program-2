@@ -103,7 +103,7 @@ class Server:
         if self.votedFor == self.name:
            votes = votes + 1
 
-        print(votes + " votes received")
+        print(str(votes) + " votes received")
         if votes > 1:
             return True
         else:
