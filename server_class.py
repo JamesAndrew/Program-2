@@ -101,7 +101,7 @@ class Server:
         for message in messages:
             m_list = message.body.split(",")
             print(m_list)
-            if m_list[0] == "vote" and m_list[2] == self.name:
+            if m_list[0] == "vote" and int(m_list[2]) == int(self.name):
                 votes = votes + 1
                 
         if self.votedFor == self.name:
