@@ -104,7 +104,7 @@ class Server:
             if m_list[0] == "vote" and int(m_list[2]) == int(self.name):
                 votes = votes + 1
                 
-        if self.votedFor == self.name:
+        if int(self.votedFor) == int(self.name):
            votes = votes + 1
 
         print(str(votes) + " votes received")
