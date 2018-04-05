@@ -103,9 +103,10 @@ class Server:
             print(m_list)
             if m_list[0] == "vote" and int(m_list[2]) == int(self.name):
                 votes = votes + 1
-                
-        if int(self.votedFor) == int(self.name):
-           votes = votes + 1
+            elif int(self.votedFor) == int(self.name):
+                votes = votes + 1
+            else:
+                print("error processing votes")
 
         print(str(votes) + " votes received")
         if votes > 1:
@@ -133,6 +134,7 @@ class Server:
             if int(m_list[1]) > int(self.curTerm):
                 self.curTerm = int(m_list[1])
                 self.role = 0
+                self.start_timer()
     
     def fail(self):
         print("node " + str(self.name) + " failed")
