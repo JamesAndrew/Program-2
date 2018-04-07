@@ -17,7 +17,6 @@ class Server:
     
     # persitent state
     curTerm = 0
-    votedFor = 5 # 5 indicates a null value
     log = []
     state = ""
 
@@ -96,15 +95,13 @@ class Server:
 
     def processVotes(self):
         print("processing votes")
-        votes = 0
+        votes = 1
         queue = sqs.get_queue_by_name(QueueName='node' + str(self.name))
         messages = queue.receive_messages()
         for message in messages:
             m_list = message.body.split(",")
             print(m_list)
             if m_list[0] == "vote" and int(m_list[2]) == int(self.name):
-                votes = votes + 1
-            elif int(self.votedFor) == int(self.name):
                 votes = votes + 1
             else:
                 print("error processing votes")

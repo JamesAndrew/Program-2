@@ -11,7 +11,6 @@ def checkClientMessages():
 def election():
     print("election started")
     s.curTerm = int(s.curTerm) + 1
-    s.votedFor = s.name
     s.start_timer()
     s.sendRequestVote(s.curTerm,s.getName(),1,1)
 
