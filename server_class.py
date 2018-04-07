@@ -88,7 +88,7 @@ class Server:
         self.checkTerm(int(msg[1]))
         if int(msg[1]) < int(self.curTerm):
             pass
-        elif int(self.votedFor) == 5 or int(self.votedFor) == int(msg[2]):
+        else:
             print("vote, " + str(msg[1]) + "," + str(msg[2]))
             sqs.get_queue_by_name(QueueName='node' + str(self.name)).send_message(MessageBody="vote," + str(msg[1]) + "," + str(msg[2]))
             self.start_timer()
