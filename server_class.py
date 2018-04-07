@@ -103,8 +103,6 @@ class Server:
             print(m_list)
             if m_list[0] == "vote" and int(m_list[2]) == int(self.name):
                 votes = votes + 1
-            else:
-                print("error processing votes")
 
         print(str(votes) + " votes received")
         if votes > 1:
