@@ -107,7 +107,7 @@ class Server:
                 votes = votes + 1
 
         print(str(votes) + " votes received")
-        if votes > 2:
+        if votes > 1:
             return True
         else:
             return False
