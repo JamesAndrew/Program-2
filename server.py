@@ -19,17 +19,18 @@ s = server_class.Server()
 s.start_timer()
 sqs = boto3.resource('sqs')
 
-# set timer for node failure
-ti = Timer(5, s.fail())
+if s.name == 0:
+    # set timer for node failure
+    ti = Timer(5.0, s.fail())
 
-# set timer for leader timeout
-timeout = Timer(10, s.fail())
+    # set timer for leader timeout
+    timeout = Timer(10.0, s.fail())
 
 # main loop of Server
 loop = True
 count = 30
 while loop:
-    if running == True:
+    if s.running == True:
         print("term " + str(s.curTerm))
         # code for all servers
         if s.commitIndex > s.lastApplied:
