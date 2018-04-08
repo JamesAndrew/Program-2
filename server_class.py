@@ -41,7 +41,7 @@ class Server:
 
     def start_timer(self):
         self.timer = True
-        rand = random.uniform(1.0, 5.0)
+        rand = random.uniform(0.3, 1.0)
         self.t = Timer(rand, self.out_of_time)
         self.t.start()
         print("node " + str(self.name) + " timer started for " + str(rand) + "s")
@@ -136,9 +136,16 @@ class Server:
     
     def fail(self):
         print("node " + str(self.name) + " failed")
+        self.running = False
+        t = Timer(5, self.recover())
+        t.start()
 
     def recover(self):
         print("node " + str(self.name) + " is recovering")
+        self.running = True
 
     def timeout(self):
         print("coordinator timeout")
+        self.running = False
+        t = Timer(1, self.recover())
+        t.start()
