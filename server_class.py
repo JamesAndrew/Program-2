@@ -70,9 +70,11 @@ class Server:
         print("receive append entry message")
         print(a)
         msg = a.split(",")
-        self.checkTerm(int(a[1]))        
+        self.checkTerm(int(msg[1]))        
         self.role = 0
         self.start_timer()
+        if msg[1] < curTerm:
+            pass
 
     def sendRequestVote(self, term, candidateId, lastLogIndex, lastLogTerm):
         self.checkTerm(term)
